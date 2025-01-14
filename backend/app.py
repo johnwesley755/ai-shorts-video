@@ -15,6 +15,7 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 @app.route("/generate", methods=["POST"])
 def generate():
     try:
+        # Get JSON data from the request
         data = request.get_json()
         prompt = data.get("prompt")
         if not prompt:
@@ -25,9 +26,8 @@ def generate():
         video_url = f"http://127.0.0.1:5000/static/{os.path.basename(video_path)}"
         return jsonify({"video_url": video_url})
     except Exception as e:
-        print(f"Error in /generate: {e}")  # Log the exact error
-        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
-
+        print(f"Error in /generate: {e}")  # Log the error
+        return jsonify({"error": "An error occurred while generating the video."}), 500
 
 @app.route("/static/<path:filename>")
 def static_files(filename):

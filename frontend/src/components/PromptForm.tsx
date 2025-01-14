@@ -26,11 +26,9 @@ const PromptForm = ({
       });
       setVideoUrl(response.data.video_url);
     } catch (error: any) {
-      console.error("Error generating video:", error);
-      alert(
-        `Error: ${error.response?.data?.error || "An unknown error occurred."}`
-      );
-    }
+  console.error("Error generating video:", error);
+  alert(`Error: ${error.response?.data?.error || "An unknown error occurred."}`);
+}
  {
       setLoading(false);
     }
