@@ -1,0 +1,10 @@
+flask
+diffusers
+transformers
+accelerate
+torch
+torchvision
+gtts
+moviepy
+ffmpeg-python
+flask-cors
