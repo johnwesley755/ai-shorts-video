@@ -12,3 +12,5 @@ opencv-python
 opencv-python-headless
 torchaudio
 numpy
+av
+pyttsx3
