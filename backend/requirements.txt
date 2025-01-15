@@ -8,3 +8,7 @@ gtts
 moviepy
 ffmpeg-python
 flask-cors
+opencv-python
+opencv-python-headless
+torchaudio
+numpy

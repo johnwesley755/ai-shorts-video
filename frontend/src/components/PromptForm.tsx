@@ -6,30 +6,25 @@ const PromptForm = ({
 }: {
   setVideoUrl: React.Dispatch<React.SetStateAction<string>>;
 }) => {
-  // Retrieve saved prompt from localStorage, if it exists
-  const savedPrompt = localStorage.getItem("prompt") || "";
-  const [prompt, setPrompt] = useState<string>(savedPrompt);
+  const savedPrompt = localStorage.getItem("prompt");
+  const [prompt, setPrompt] = useState<string>(savedPrompt || "");
   const [loading, setLoading] = useState(false);
 
-  // Save prompt to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem("prompt", prompt);
+    if (prompt) localStorage.setItem("prompt", prompt);
   }, [prompt]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
     try {
       const response = await axios.post("http://127.0.0.1:5000/generate", {
         prompt,
       });
       setVideoUrl(response.data.video_url);
-    } catch (error: any) {
-  console.error("Error generating video:", error);
-  alert(`Error: ${error.response?.data?.error || "An unknown error occurred."}`);
-}
- {
+    } catch (error) {
+      console.error("Error generating video:", error);
+    } finally {
       setLoading(false);
     }
   };
