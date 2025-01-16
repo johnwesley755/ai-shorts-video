@@ -32,13 +32,8 @@ def generate():
     try:
         # Retrieve the prompt from the request
         data = request.get_json()
-        if not data or "prompt" not in data:
-            return jsonify({"error": "Prompt is required"}), 400
-
-        prompt = data["prompt"].strip()
-        if not prompt:
-            return jsonify({"error": "Prompt cannot be empty"}), 400
-
+        prompt = data.get("prompt", "Default prompt").strip()  # Default prompt for testing
+        
         # Generate the video
         video_path = generate_video(prompt)
         video_filename = os.path.basename(video_path)
@@ -47,12 +42,13 @@ def generate():
         if not os.path.isfile(os.path.join(OUTPUT_DIR, video_filename)):
             return jsonify({"error": "Video generation failed"}), 500
 
+        # Serve the generated video
         video_url = f"http://127.0.0.1:5000/output/{video_filename}"
-        return jsonify({"video_url": video_url})
+        return jsonify({"videoUrl": video_url})  # Match frontend key here
     except Exception as e:
-        # Log the error for debugging purposes
         app.logger.error(f"Error in /generate: {str(e)}")
         return jsonify({"error": "An unexpected error occurred"}), 500
+
 
 @app.route("/output/<path:filename>")
 def static_files(filename):
