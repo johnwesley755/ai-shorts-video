@@ -16,4 +16,5 @@ av
 pyttsx3
 diffusers
 Pillow
+scipy
 pytorch-pretrained-biggan
