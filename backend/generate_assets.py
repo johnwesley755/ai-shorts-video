@@ -49,20 +49,20 @@ def generate_video(prompt):
 
 def generate_image(prompt, output_path):
     """Generate an image with OpenCV."""
-    # Create a blank black image
-    img = np.zeros((500, 500, 3), dtype=np.uint8)
+    # Create a blank white image
+    img = np.ones((500, 500, 3), dtype=np.uint8) * 255  # White background
     
     # Define text properties
     text = prompt[:20]  # Limit text to 20 characters
     font = cv2.FONT_HERSHEY_SIMPLEX
-    font_scale = 1
-    color = (255, 255, 255)  # White text
+    font_scale = 1.5
+    color = (0, 0, 0)  # Black text
     thickness = 2
 
     # Get text size to center it
     text_size = cv2.getTextSize(text, font, font_scale, thickness)[0]
-    text_x = (img.shape[1] - text_size[0]) // 2
-    text_y = (img.shape[0] + text_size[1]) // 2
+    text_x = (img.shape[1] - text_size[0]) // 2  # Center horizontally
+    text_y = (img.shape[0] + text_size[1]) // 2  # Center vertically
 
     # Add text to the image
     cv2.putText(img, text, (text_x, text_y), font, font_scale, color, thickness, cv2.LINE_AA)

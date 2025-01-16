@@ -4,12 +4,16 @@ import axios from "axios";
 const VideoGeneratorApp = () => {
   const savedPrompt = localStorage.getItem("prompt");
   const [prompt, setPrompt] = useState<string>(savedPrompt || "");
-  const [videoUrl, setVideoUrl] = useState<string>("");
+  const [videoUrl, setVideoUrl] = useState<string>(""); // Video URL resets on refresh
   const [loading, setLoading] = useState<boolean>(false);
 
   // Save prompt to localStorage whenever it changes
   useEffect(() => {
-    if (prompt) localStorage.setItem("prompt", prompt);
+    if (prompt) {
+      localStorage.setItem("prompt", prompt);
+    } else {
+      localStorage.removeItem("prompt");
+    }
   }, [prompt]);
 
   // Handle video generation
