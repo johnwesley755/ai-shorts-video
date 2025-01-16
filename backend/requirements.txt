@@ -14,3 +14,5 @@ torchaudio
 numpy
 av
 pyttsx3
+diffusers
+Pillow

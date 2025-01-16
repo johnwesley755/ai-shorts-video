@@ -1,5 +1,6 @@
 import cv2
 import os
+import numpy as np
 from gtts import gTTS
 import subprocess
 
@@ -16,9 +17,17 @@ def generate_video(prompt):
     image_path = os.path.join(OUTPUT_DIR, "generated_image.png")
     generate_image(prompt, image_path)
 
+    # Check if the image was created successfully
+    if not os.path.isfile(image_path):
+        raise RuntimeError("Image generation failed!")
+
     # Step 2: Add audio narration
     audio_path = os.path.join(OUTPUT_DIR, "narration.mp3")
     generate_audio(prompt, audio_path)
+
+    # Check if the audio was created successfully
+    if not os.path.isfile(audio_path):
+        raise RuntimeError("Audio generation failed!")
 
     # Step 3: Combine image and narration into a video using FFmpeg
     video_path = os.path.join(OUTPUT_DIR, "generated_video.mp4")
@@ -35,19 +44,28 @@ def generate_video(prompt):
 
 def generate_image(prompt, output_path):
     """Generate an image with OpenCV."""
-    img = cv2.putText(
-        img=np.zeros((500, 500, 3), dtype=np.uint8),
-        text=prompt[:20],
-        org=(50, 250),
-        fontFace=cv2.FONT_HERSHEY_SIMPLEX,
-        fontScale=1,
-        color=(255, 255, 255),
-        thickness=2,
-        lineType=cv2.LINE_AA,
-    )
+    # Create a blank black image
+    img = np.zeros((500, 500, 3), dtype=np.uint8)
+    
+    # Define text properties
+    text = prompt[:20]  # Limit text to 20 characters
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    font_scale = 1
+    color = (255, 255, 255)  # White text
+    thickness = 2
+
+    # Get text size to center it
+    text_size = cv2.getTextSize(text, font, font_scale, thickness)[0]
+    text_x = (img.shape[1] - text_size[0]) // 2
+    text_y = (img.shape[0] + text_size[1]) // 2
+
+    # Add text to the image
+    cv2.putText(img, text, (text_x, text_y), font, font_scale, color, thickness, cv2.LINE_AA)
+
+    # Save the image
     cv2.imwrite(output_path, img)
 
 def generate_audio(prompt, output_path):
     """Generate text-to-speech narration."""
-    tts = gTTS(prompt)
-    tts.save(output_path)
+    tts = gTTS(prompt)  # Convert text to speech
+    tts.save(output_path)  # Save the audio as an MP3
