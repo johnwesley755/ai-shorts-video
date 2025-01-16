@@ -7,10 +7,12 @@ const VideoGeneratorApp = () => {
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
+  // Save prompt to localStorage whenever it changes
   useEffect(() => {
     if (prompt) localStorage.setItem("prompt", prompt);
   }, [prompt]);
 
+  // Handle video generation
   const handleGenerateVideo = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -19,6 +21,7 @@ const VideoGeneratorApp = () => {
         prompt,
       });
       console.log("Backend Response:", response.data);
+
       if (response.data.videoUrl) {
         setVideoUrl(response.data.videoUrl);
       } else {
