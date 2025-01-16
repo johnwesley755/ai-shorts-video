@@ -1,7 +1,3 @@
-Here’s the updated README file with the **License** section removed and **commands in bash** for better clarity:
-
----
-
 # 🎥 AI Shorts Video Generator
 
 Welcome to the **AI Shorts Video Generator**! This project allows users to generate creative short videos instantly by simply providing a prompt. It leverages AI technology to bring your ideas to life with video content!
