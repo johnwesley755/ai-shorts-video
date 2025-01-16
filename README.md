@@ -33,7 +33,7 @@ Follow these steps to get this project up and running locally.
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/ai-shorts-video-generator.git
+git clone https://github.com/johnwesley755/ai-shorts-video-generator.git
 cd ai-shorts-video-generator
 ```
 
@@ -89,7 +89,7 @@ Check out the video generator in action! You can enter a prompt, generate a vide
 
 ## 📸 Screenshots
 
-![Video Generator App Screenshot](./screenshots/video-generator.png)
+![Video Generator App Screenshot](/frontend/src/assets/screenshot.png)
 
 ## 📄 How it Works
 
