@@ -3,6 +3,7 @@ import os
 import numpy as np
 from gtts import gTTS
 import subprocess
+from datetime import datetime
 
 # Directory for generated outputs
 OUTPUT_DIR = "output"
@@ -13,8 +14,13 @@ FFMPEG_PATH = "C:\\ffmpeg\\ffmpeg.exe"
 
 def generate_video(prompt):
     """Generate a short video from a text prompt."""
+    # Generate a unique video filename using the current timestamp
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    video_filename = f"generated_video_{timestamp}.mp4"
+    video_path = os.path.join(OUTPUT_DIR, video_filename)
+
     # Step 1: Generate an image
-    image_path = os.path.join(OUTPUT_DIR, "generated_image.png")
+    image_path = os.path.join(OUTPUT_DIR, f"generated_image_{timestamp}.png")
     generate_image(prompt, image_path)
 
     # Check if the image was created successfully
@@ -22,7 +28,7 @@ def generate_video(prompt):
         raise RuntimeError("Image generation failed!")
 
     # Step 2: Add audio narration
-    audio_path = os.path.join(OUTPUT_DIR, "narration.mp3")
+    audio_path = os.path.join(OUTPUT_DIR, f"narration_{timestamp}.mp3")
     generate_audio(prompt, audio_path)
 
     # Check if the audio was created successfully
@@ -30,7 +36,6 @@ def generate_video(prompt):
         raise RuntimeError("Audio generation failed!")
 
     # Step 3: Combine image and narration into a video using FFmpeg
-    video_path = os.path.join(OUTPUT_DIR, "generated_video.mp4")
     command = [
         FFMPEG_PATH, "-loop", "1", "-i", image_path, "-i", audio_path,
         "-c:v", "libx264", "-t", "10", "-pix_fmt", "yuv420p", video_path

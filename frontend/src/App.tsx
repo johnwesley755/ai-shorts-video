@@ -32,8 +32,7 @@ const VideoGeneratorApp = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black p-8 text-white font-sans">
-      {/* Header Section */}
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-800 to-black p-8 text-white font-sans">
       <div className="max-w-5xl mx-auto text-center mb-10">
         <h1 className="text-5xl font-extrabold leading-tight text-indigo-100 lg:mt-20">
           🎥 AI Shorts Video Generator
@@ -43,16 +42,14 @@ const VideoGeneratorApp = () => {
         </p>
       </div>
 
-      {/* Main Content Section */}
       <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10">
-        {/* Prompt Form Section */}
         <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl shadow-2xl relative border">
           <h2 className="text-3xl font-bold text-center tracking-wide text-indigo-100 mb-6">
             Enter Your Prompt
           </h2>
           <form onSubmit={handleGenerateVideo} className="space-y-2">
             <textarea
-              className="w-full p-5 border-2 border bg-gray-900 text-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300 focus:border-none transition-all"
+              className="w-full p-5 border bg-gray-900 text-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300 focus:border-none transition-all"
               rows={6}
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
@@ -72,7 +69,6 @@ const VideoGeneratorApp = () => {
           </form>
         </div>
 
-        {/* Video Preview Section */}
         <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl shadow-2xl relative border">
           <h2 className="text-3xl font-bold tracking-wide text-center text-white mb-6">
             Generated Video Preview
@@ -86,7 +82,6 @@ const VideoGeneratorApp = () => {
           >
             {videoUrl ? (
               <div className="relative flex justify-center">
-                {/* Decorative Frames */}
                 <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-10 h-32 bg-indigo-500 rounded-lg animate-pulse"></div>
                 <video
                   controls

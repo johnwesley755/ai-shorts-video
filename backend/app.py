@@ -4,11 +4,11 @@ from generate_assets import generate_video
 import os
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:5173"])
+CORS(app, origins=["http://localhost:5173"])  # Enable CORS for your frontend app
 
 # Output directory setup
 OUTPUT_DIR = os.path.abspath("output")
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+os.makedirs(OUTPUT_DIR, exist_ok=True)  # Ensure the output directory exists
 
 @app.route("/")
 def index():
@@ -32,22 +32,26 @@ def generate():
     try:
         # Retrieve the prompt from the request
         data = request.get_json()
-        prompt = data.get("prompt", "Default prompt").strip()  # Default prompt for testing
+        prompt = data.get("prompt", "").strip()  # Default prompt for testing
+
+        if not prompt:
+            return jsonify({"error": "Prompt is required to generate a video."}), 400
         
-        # Generate the video
+        # Generate the video with the prompt
         video_path = generate_video(prompt)
         video_filename = os.path.basename(video_path)
-        
-        # Ensure the file exists before sending its URL
+
+        # Ensure the file exists before serving it
         if not os.path.isfile(os.path.join(OUTPUT_DIR, video_filename)):
             return jsonify({"error": "Video generation failed"}), 500
 
-        # Serve the generated video
+        # Generate the URL to serve the video
         video_url = f"http://127.0.0.1:5000/output/{video_filename}"
-        return jsonify({"videoUrl": video_url})  # Match frontend key here
+        return jsonify({"videoUrl": video_url})  # Frontend key to match video URL
+
     except Exception as e:
         app.logger.error(f"Error in /generate: {str(e)}")
-        return jsonify({"error": "An unexpected error occurred"}), 500
+        return jsonify({"error": "An unexpected error occurred during video generation."}), 500
 
 
 @app.route("/output/<path:filename>")
@@ -58,8 +62,10 @@ def static_files(filename):
     try:
         safe_path = os.path.abspath(os.path.join(OUTPUT_DIR, filename))
         if not safe_path.startswith(OUTPUT_DIR):
-            return jsonify({"error": "Access denied"}), 403
+            return jsonify({"error": "Access denied"}), 403  # Prevent directory traversal attacks
+        
         return send_from_directory(OUTPUT_DIR, filename)
+    
     except Exception as e:
         app.logger.error(f"Error serving static file: {str(e)}")
         return jsonify({"error": "File not found"}), 404
