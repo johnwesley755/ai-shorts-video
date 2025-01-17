@@ -39,24 +39,29 @@ const VideoGeneratorApp = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-800 to-black p-8 text-white font-sans">
-      <div className="max-w-5xl mx-auto text-center mb-10">
-        <h1 className="text-5xl font-extrabold leading-tight text-indigo-100 lg:mt-20">
+    <div className="min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 p-8 font-sans relative overflow-hidden">
+      {/* Gradient Shapes */}
+      <div className="absolute top-10 left-20 w-40 h-40 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full animate-bounce" />
+      <div className="absolute bottom-20 right-20 w-32 h-32 bg-gradient-to-br from-blue-500 to-green-500 rounded-full animate-pulse" />
+      <div className="absolute top-1/3 right-1/4 w-48 h-48 bg-gradient-to-br from-yellow-500 to-red-500 rounded-lg transform rotate-45 opacity-70 animate-spin-slow" />
+
+      <div className="max-w-5xl mx-auto text-center mb-10 relative z-10">
+        <h1 className="text-6xl font-extrabold leading-tight text-purple-900 drop-shadow-md lg:mt-20">
           🎥 AI Shorts Video Generator
         </h1>
-        <p className="text-xl mt-4 text-gray-300">
+        <p className="text-2xl mt-4 text-purple-700">
           Generate creative short videos instantly by entering a simple prompt.
         </p>
       </div>
 
-      <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10">
-        <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl shadow-2xl relative border">
-          <h2 className="text-3xl font-bold text-center tracking-wide text-indigo-100 mb-6">
+      <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 relative z-10">
+        <div className="bg-gradient-to-br from-white to-gray-100 p-8 rounded-2xl shadow-2xl relative border">
+          <h2 className="text-4xl font-bold text-center tracking-wide text-purple-900 mb-6">
             Enter Your Prompt
           </h2>
-          <form onSubmit={handleGenerateVideo} className="space-y-2">
+          <form onSubmit={handleGenerateVideo} className="space-y-4">
             <textarea
-              className="w-full p-5 border bg-gray-900 text-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300 focus:border-none transition-all"
+              className="w-full p-5 border bg-white text-gray-800 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-400 transition-all shadow-lg"
               rows={6}
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
@@ -64,10 +69,10 @@ const VideoGeneratorApp = () => {
             />
             <button
               type="submit"
-              className={`w-full py-3 font-semibold text-lg rounded-lg transition duration-300 ${
+              className={`w-full py-4 font-bold text-lg rounded-full transition duration-300 transform hover:scale-105 shadow-lg ${
                 loading
-                  ? "bg-indigo-300 text-indigo-800 cursor-not-allowed"
-                  : "bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg hover:shadow-indigo-500/50"
+                  ? "bg-purple-300 text-purple-800 cursor-not-allowed"
+                  : "bg-gradient-to-br from-purple-600 to-indigo-600 text-white hover:from-indigo-700 hover:to-purple-700"
               }`}
               disabled={loading}
             >
@@ -76,28 +81,28 @@ const VideoGeneratorApp = () => {
           </form>
         </div>
 
-        <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl shadow-2xl relative border">
-          <h2 className="text-3xl font-bold tracking-wide text-center text-white mb-6">
+        <div className="bg-gradient-to-br from-white to-gray-100 p-8 rounded-2xl shadow-2xl relative border">
+          <h2 className="text-4xl font-bold tracking-wide text-center text-purple-900 mb-6">
             Generated Video Preview
           </h2>
           <div
-            className={`p-6 border-4 rounded-lg shadow-lg transition-all ${
+            className={`p-6 border-4 rounded-lg shadow-lg transition-all relative overflow-hidden ${
               videoUrl
-                ? "border-green-500 bg-gray-800"
-                : "border-gray-700 bg-gray-700 text-gray-400"
+                ? "border-green-500 bg-white"
+                : "border-gray-300 bg-gray-200 text-gray-500"
             }`}
           >
             {videoUrl ? (
-              <div className="relative flex justify-center">
-                <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-10 h-32 bg-indigo-500 rounded-lg animate-pulse"></div>
+              <div className="relative flex justify-center items-center">
+                <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full animate-bounce" />
                 <video
                   controls
-                  className="w-full md:w-3/4 lg:w-2/3 mx-auto rounded-lg shadow-lg border-2 border-indigo-500"
+                  className="w-full md:w-3/4 lg:w-2/3 mx-auto rounded-lg shadow-lg border-2 border-purple-400"
                 >
                   <source src={videoUrl} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
-                <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-10 h-32 bg-indigo-500 rounded-lg animate-pulse"></div>
+                <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-gradient-to-br from-blue-500 to-green-500 rounded-full animate-bounce" />
               </div>
             ) : (
               <p className="text-center text-xl">No video available yet.</p>
