@@ -5,6 +5,7 @@ const VideoGeneratorApp = () => {
   const savedPrompt = localStorage.getItem("prompt");
   const [prompt, setPrompt] = useState<string>(savedPrompt || "");
   const [videoUrl, setVideoUrl] = useState<string>(""); // Video URL resets on refresh
+  const [downloadUrl, setDownloadUrl] = useState<string>(""); // Download URL for the generated video
   const [loading, setLoading] = useState<boolean>(false);
 
   // Save prompt to localStorage whenever it changes
@@ -26,10 +27,11 @@ const VideoGeneratorApp = () => {
       });
       console.log("Backend Response:", response.data);
 
-      if (response.data.videoUrl) {
+      if (response.data.videoUrl && response.data.downloadUrl) {
         setVideoUrl(response.data.videoUrl);
+        setDownloadUrl(response.data.downloadUrl);
       } else {
-        console.error("Video URL not found in response.");
+        console.error("Video or download URL not found in response.");
       }
     } catch (error) {
       console.error("Error generating video:", error);
@@ -56,7 +58,7 @@ const VideoGeneratorApp = () => {
 
       <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 relative z-10">
         <div className="bg-gradient-to-br from-white to-gray-100 p-8 rounded-2xl shadow-2xl relative border">
-          <h2 className="text-4xl font-bold text-center tracking-wide text-purple-900 mb-6">
+          <h2 className="text-4xl font-extrabold text-center tracking-normal text-purple-900 mb-6">
             Enter Your Prompt
           </h2>
           <form onSubmit={handleGenerateVideo} className="space-y-4">
@@ -82,7 +84,7 @@ const VideoGeneratorApp = () => {
         </div>
 
         <div className="bg-gradient-to-br from-white to-gray-100 p-8 rounded-2xl shadow-2xl relative border">
-          <h2 className="text-4xl font-bold tracking-wide text-center text-purple-900 mb-6">
+          <h2 className="text-4xl font-extrabold tracking-normal text-center text-purple-900 mb-6">
             Generated Video Preview
           </h2>
           <div
@@ -93,8 +95,7 @@ const VideoGeneratorApp = () => {
             }`}
           >
             {videoUrl ? (
-              <div className="relative flex justify-center items-center">
-                <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full animate-bounce" />
+              <div className="relative flex flex-col justify-center items-center space-y-4">
                 <video
                   controls
                   className="w-full md:w-3/4 lg:w-2/3 mx-auto rounded-lg shadow-lg border-2 border-purple-400"
@@ -102,7 +103,13 @@ const VideoGeneratorApp = () => {
                   <source src={videoUrl} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
-                <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-gradient-to-br from-blue-500 to-green-500 rounded-full animate-bounce" />
+                <a
+                  href={downloadUrl}
+                  download
+                  className="mt-4 inline-block bg-gradient-to-br from-green-500 to-teal-500 text-white py-3 px-6 rounded-lg font-bold shadow-lg transform transition duration-300 hover:scale-105"
+                >
+                  Download Video
+                </a>
               </div>
             ) : (
               <p className="text-center text-xl">No video available yet.</p>

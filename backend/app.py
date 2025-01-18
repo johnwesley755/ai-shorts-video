@@ -32,7 +32,7 @@ def generate():
     try:
         # Retrieve the prompt from the request
         data = request.get_json()
-        prompt = data.get("prompt", "").strip()  # Default prompt for testing
+        prompt = data.get("prompt", "").strip()
 
         if not prompt:
             return jsonify({"error": "Prompt is required to generate a video."}), 400
@@ -45,14 +45,18 @@ def generate():
         if not os.path.isfile(os.path.join(OUTPUT_DIR, video_filename)):
             return jsonify({"error": "Video generation failed"}), 500
 
-        # Generate the URL to serve the video
+        # Generate URLs for serving and downloading the video
         video_url = f"http://127.0.0.1:5000/output/{video_filename}"
-        return jsonify({"videoUrl": video_url})  # Frontend key to match video URL
+        download_url = f"http://127.0.0.1:5000/download/{video_filename}"
+        
+        return jsonify({
+            "videoUrl": video_url,      # For viewing the video
+            "downloadUrl": download_url # For downloading the video
+        })
 
     except Exception as e:
         app.logger.error(f"Error in /generate: {str(e)}")
         return jsonify({"error": "An unexpected error occurred during video generation."}), 500
-
 
 @app.route("/output/<path:filename>")
 def static_files(filename):
@@ -68,6 +72,22 @@ def static_files(filename):
     
     except Exception as e:
         app.logger.error(f"Error serving static file: {str(e)}")
+        return jsonify({"error": "File not found"}), 404
+
+@app.route("/download/<path:filename>")
+def download_file(filename):
+    """
+    Serve the file as a downloadable attachment.
+    """
+    try:
+        safe_path = os.path.abspath(os.path.join(OUTPUT_DIR, filename))
+        if not safe_path.startswith(OUTPUT_DIR):
+            return jsonify({"error": "Access denied"}), 403  # Prevent directory traversal attacks
+
+        return send_from_directory(OUTPUT_DIR, filename, as_attachment=True)
+    
+    except Exception as e:
+        app.logger.error(f"Error serving file for download: {str(e)}")
         return jsonify({"error": "File not found"}), 404
 
 if __name__ == "__main__":
